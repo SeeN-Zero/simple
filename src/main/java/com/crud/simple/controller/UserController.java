@@ -1,5 +1,6 @@
 package com.crud.simple.controller;
 
+import com.crud.simple.dto.request.UserDeleteRequest;
 import com.crud.simple.dto.request.UserUpdateRequest;
 import com.crud.simple.dto.response.GenericResponse;
 import com.crud.simple.service.UserService;
@@ -16,12 +17,22 @@ public class UserController {
 
     private final UserService userService;
 
-    @PutMapping("/user/update")
-    public ResponseEntity<GenericResponse> updateIndividual(@RequestBody UserUpdateRequest request) {
+    @PostMapping("/user/update")
+    public ResponseEntity<GenericResponse> updateUser(@RequestBody UserUpdateRequest request) {
         try {
-            return ResponseEntity.status(HttpStatus.OK).body(userService.updateIndividual(request));
+            return ResponseEntity.status(HttpStatus.OK).body(userService.updateUser(request));
         } catch (Exception e) {
             log.error("Exception /individual/update : {}", e.toString());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(GenericResponse.builder().message("Unknown Error").build());
+        }
+    }
+
+    @PostMapping("/user/delete")
+    public ResponseEntity<GenericResponse> deleteUser(@RequestBody UserDeleteRequest request) {
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(userService.deleteUser(request));
+        } catch (Exception e) {
+            log.error("Exception /user/delete : {}", e.toString());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(GenericResponse.builder().message("Unknown Error").build());
         }
     }
